@@ -105,6 +105,3 @@ This project is created for:
 Solinda
 Sister Of Code Ambassadors 2026 Learner
 
----
-
-If you want, I can **shorten this README for school submission** or **make a GitHub professional version with badges and screenshots**.
