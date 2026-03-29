@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SOC JobSeeking  Find Your Next Role</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET ───────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',sans-serif;background:#ffffff;color:#1a1a1a;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+input,textarea,select{font-family:inherit;font-size:inherit}
+
+/* ── VARIABLES ───────────────────────────────── */
+:root{
+  --ink:#111;--body:#444;--muted:#999;--border:#e8e6e0;
+  --surf:#f3f1ec;--white:#fff;
+  --blue:#2563eb;--blue-lt:#eff4ff;
+  --green:#16a34a;--green-lt:#f0fdf4;
+  --amber:#d97706;--amber-lt:#fffbeb;
+  --red:#dc2626;--red-lt:#fff1f1;
+  --purple:#9333ea;--purple-lt:#fdf4ff;
+  --r:10px;--t:.2s ease;
+}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
+
+/* ════════════════════════════════════════════════
+   CSS-ONLY PAGE ROUTING  (:target)
+   All pages hidden; targeted page shown.
+   Home shown when nothing is targeted.
+════════════════════════════════════════════════ */
+.pg{display:none;min-height:100vh;flex-direction:column}
+.pg:target{display:flex}
+body:not(:has(.pg:target)) #pg-home{display:flex}
+
+/* ── BUTTONS ─────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.52rem 1.15rem;border-radius:var(--r);font-size:.82rem;font-weight:600;border:1px solid transparent;transition:all var(--t);white-space:nowrap;font-family:'Manrope',sans-serif;cursor:pointer;line-height:1.4}
+.ghost{background:transparent;border-color:var(--border);color:var(--body)}.ghost:hover{background:var(--surf);color:var(--ink)}
+.solid{background:var(--ink);color:var(--white);border-color:var(--ink)}.solid:hover{background:#2a2a2a}
+.accent{background:var(--blue);color:var(--white);border-color:var(--blue)}.accent:hover{background:#1d55d4}
+.outline{border-color:var(--blue);color:var(--blue)}.outline:hover{background:var(--blue);color:var(--white)}
+.wht{background:var(--white);color:var(--ink);border-color:var(--white)}.wht:hover{background:#f0f0f0}
+.owht{border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.75)}.owht:hover{background:rgba(255,255,255,.1);color:#fff}
+.lg{padding:.72rem 1.6rem;font-size:.92rem}
+
+/* ── NAV (shared) ────────────────────────────── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5.5%;height:64px;flex-shrink:0}
+.logo{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--ink);letter-spacing:-.3px}
+.logo em{color:var(--blue);font-style:normal}
+.navlinks{display:flex;gap:1.75rem}
+.navlinks a{font-size:.82rem;font-weight:500;color:var(--body);transition:color var(--t)}
+.navlinks a:hover{color:var(--ink)}
+.navlinks a.on{color:var(--blue);font-weight:600;border-bottom:2px solid var(--blue);padding-bottom:1px}
+.navr{display:flex;gap:.6rem;align-items:center}
+
+/* ── LAYOUT ──────────────────────────────────── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 5.5%}
+.sec{padding:72px 0}.sec-sm{padding:48px 0}
+.bg-s{background:var(--surf)}
+.sec-tag{font-size:.69rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.55rem;display:flex;align-items:center;gap:.5rem}
+.sec-tag::after{content:'';display:block;height:1px;background:var(--border);max-width:56px;flex:1}
+.sec-tag.c{justify-content:center}.sec-tag.c::after,.sec-tag.c::before{content:'';display:block;height:1px;background:var(--border);max-width:56px;flex:1}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.1rem,4vw,3.3rem);font-weight:700;line-height:1.1;letter-spacing:-1px;color:var(--ink)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.55rem,3vw,2.25rem);font-weight:700;letter-spacing:-.5px;color:var(--ink);line-height:1.2}
+h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--ink)}
+.sub{font-size:.87rem;color:var(--muted);margin-top:.45rem}
+.sh{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem}
+hr.d{border:none;border-top:1px solid var(--border)}
+
+/* grids */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+.jg{display:grid;grid-template-columns:repeat(auto-fill,minmax(305px,1fr));gap:1rem}
+.cog{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:1rem}
+
+/* ── BADGES ──────────────────────────────────── */
+.bdg{padding:.2rem .62rem;border-radius:99px;font-size:.65rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.bf{background:var(--green-lt);color:var(--green)}
+.br{background:var(--blue-lt);color:var(--blue)}
+.bp{background:var(--amber-lt);color:var(--amber)}
+.bi{background:var(--purple-lt);color:var(--purple)}
+.bc{background:#fff7ed;color:#c2410c}
+
+/* ── CATEGORY CARD ───────────────────────────── */
+.catc{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:1.35rem 1.2rem;transition:all var(--t);display:block}
+.catc:hover{border-color:var(--blue);box-shadow:0 4px 22px rgba(37,99,235,.08);transform:translateY(-2px)}
+.catic{font-size:1.55rem;margin-bottom:.65rem}
+.catnm{font-size:.87rem;font-weight:600;color:var(--ink)}
+.catct{font-size:.74rem;color:var(--muted);margin-top:.13rem}
+
+/* ── JOB CARD ────────────────────────────────── */
+.jcard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.35rem;display:flex;flex-direction:column;gap:.85rem;transition:all var(--t)}
+.jcard:hover{border-color:#c7d7fd;box-shadow:0 4px 22px rgba(37,99,235,.07);transform:translateY(-2px)}
+.jct{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
+.clo{width:42px;height:42px;border-radius:9px;border:1px solid var(--border);background:var(--surf);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+.jtt{font-size:.93rem;font-weight:700;color:var(--ink);line-height:1.3}
+.jco{font-size:.78rem;color:var(--muted);margin-top:.13rem}
+.jm{display:flex;flex-wrap:wrap;gap:.55rem}
+.mt{display:flex;align-items:center;gap:.28rem;font-size:.73rem;color:var(--muted)}
+.mt svg{width:11px;height:11px;flex-shrink:0}
+.jts{display:flex;flex-wrap:wrap;gap:.32rem}
+.jtg{padding:.16rem .58rem;background:var(--surf);border-radius:5px;font-size:.71rem;color:var(--body);font-weight:500}
+.jbot{display:flex;align-items:center;justify-content:space-between;padding-top:.82rem;border-top:1px solid var(--border)}
+.jsal{font-size:.88rem;font-weight:700;color:var(--ink)}
+.jsal small{font-size:.71rem;font-weight:400;color:var(--muted)}
+.jacts{display:flex;gap:.38rem;align-items:center}
+
+/* CSS bookmark toggle */
+.bki{display:none}
+.bkl{width:30px;height:30px;border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all var(--t)}
+.bkl:hover,.bki:checked~.bkl{border-color:var(--red);color:var(--red);background:var(--red-lt)}
+.abtn{padding:.35rem .9rem;border:1px solid var(--blue);border-radius:7px;background:transparent;color:var(--blue);font-size:.76rem;font-weight:600;transition:all var(--t);display:inline-block}
+.abtn:hover{background:var(--blue);color:var(--white)}
+
+/* ── COMPANY CARD ────────────────────────────── */
+.cocard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:all var(--t);display:block}
+.cocard:hover{border-color:#c7d7fd;transform:translateY(-2px);box-shadow:0 4px 18px rgba(37,99,235,.07)}
+.cclo{width:50px;height:50px;border-radius:11px;border:1px solid var(--border);background:var(--surf);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:.9rem}
+.ccnm{font-size:.9rem;font-weight:700;color:var(--ink)}
+.ccin{font-size:.74rem;color:var(--muted);margin-top:.13rem}
+.ccbar{margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.ccbar span{font-size:.72rem;color:var(--muted)}
+.ccbar strong{font-size:.8rem;font-weight:700;color:var(--green)}
+
+/* ── HERO ────────────────────────────────────── */
+.hero{padding:76px 5.5% 60px;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1200px;margin:0 auto}
+.eyb{display:inline-flex;align-items:center;gap:.5rem;font-size:.71rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:1.15rem}
+.eyb::before{content:'';display:block;width:18px;height:2px;background:var(--blue);border-radius:99px}
+.hdsc{margin-top:.95rem;font-size:.93rem;color:var(--body);max-width:390px}
+.sw{margin-top:1.85rem;background:var(--white);border:1px solid var(--border);border-radius:12px;display:flex;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.055)}
+.sf{display:flex;align-items:center;gap:.55rem;padding:.68rem 1rem;flex:1}
+.sf svg{color:var(--muted);flex-shrink:0}
+.sf input{border:none;outline:none;background:transparent;font-family:'Manrope',sans-serif;font-size:.88rem;color:var(--ink);width:100%}
+.sf input::placeholder{color:var(--muted)}
+.ssep{width:1px;background:var(--border);align-self:stretch;margin:.5rem 0}
+.sf select{border:none;outline:none;background:transparent;font-family:'Manrope',sans-serif;font-size:.82rem;color:var(--body);padding:0 .38rem;cursor:pointer}
+.sw .accent{margin:.36rem;border-radius:8px;padding:.56rem 1.15rem;font-size:.83rem}
+.pills{display:flex;flex-wrap:wrap;gap:.42rem;margin-top:1.15rem}
+.pills span{font-size:.71rem;color:var(--muted);font-weight:500;align-self:center}
+.pill{padding:.24rem .75rem;border:1px solid var(--border);border-radius:99px;font-size:.74rem;color:var(--body);background:var(--white);transition:all var(--t);display:inline-block}
+.pill:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt)}
+.hr{display:flex;flex-direction:column;gap:.9rem}
+.srow{display:flex;gap:.9rem}
+.sc{flex:1;background:var(--white);border:1px solid var(--border);border-radius:13px;padding:1.35rem 1.15rem;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.sc .num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--ink);line-height:1}
+.sc .lbl{font-size:.72rem;color:var(--muted);margin-top:.22rem;text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+.fcard{background:var(--ink);border-radius:13px;padding:1.35rem;color:var(--white)}
+.flbl{font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.75rem}
+.fco{display:flex;align-items:center;gap:.65rem;margin-bottom:.75rem}
+.flo{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.95rem}
+.fn{font-size:.84rem;font-weight:600}
+.fls{font-size:.71rem;color:rgba(255,255,255,.48)}
+.frl{font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:600;line-height:1.3}
+.fsa{margin-top:.65rem;font-size:.76rem;color:rgba(255,255,255,.5)}
+.fsa strong{color:#7dd3fc;font-weight:600}
+.fft{margin-top:.85rem;display:flex;justify-content:space-between;align-items:center}
+.fbg{font-size:.65rem;font-weight:600;padding:.2rem .6rem;border-radius:99px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.65)}
+.fap{font-size:.75rem;font-weight:600;color:#93c5fd;display:inline-block;transition:color var(--t)}
+.fap:hover{color:#fff}
+
+/* ── HOW ─────────────────────────────────────── */
+.hgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;position:relative;text-align:center}
+.hgrid::before{content:'';position:absolute;top:34px;left:calc(12.5% + 17px);right:calc(12.5% + 17px);height:1px;background:repeating-linear-gradient(90deg,var(--border) 0,var(--border) 8px,transparent 8px,transparent 16px)}
+.step{padding:0 .9rem}
+.stnum{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.93rem;font-weight:700;color:var(--ink);margin:0 auto 1.1rem;position:relative;z-index:1}
+.stt{font-size:.85rem;font-weight:700;color:var(--ink);margin-bottom:.32rem}
+.std{font-size:.77rem;color:var(--muted);line-height:1.6}
+
+/* ── CTA STRIP ───────────────────────────────── */
+.ctas{background:var(--ink);border-radius:15px;padding:3rem 3.5rem;margin:0 5.5% 68px;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.ctas h2{color:var(--white)}
+.ctas p{color:rgba(255,255,255,.5);font-size:.85rem;margin-top:.32rem}
+.ctab{display:flex;gap:.7rem;flex-wrap:wrap}
+
+/* ── TESTIMONIAL CARD ────────────────────────── */
+.tcard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:all var(--t)}
+.tcard:hover{border-color:#c7d7fd;transform:translateY(-2px)}
+.tst{color:#f59e0b;font-size:.78rem;letter-spacing:.05em;margin-bottom:.9rem}
+.ttxt{font-size:.83rem;color:var(--body);line-height:1.75;font-style:italic}
+.tau{display:flex;align-items:center;gap:.65rem;margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--border)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--surf);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.an{font-size:.81rem;font-weight:700;color:var(--ink)}
+.ar{font-size:.7rem;color:var(--muted)}
+
+/* ── FOOTER ──────────────────────────────────── */
+footer{background:var(--ink);color:rgba(255,255,255,.55);padding:50px 5.5% 24px;flex-shrink:0}
+.fgrid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.flogo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--white);display:inline-block}
+.flogo em{color:#93c5fd;font-style:normal}
+.ftag{font-size:.79rem;margin-top:.65rem;line-height:1.7;max-width:215px}
+.fc h4{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:.85rem}
+.fc li+li{margin-top:.42rem}
+.fc a{font-size:.79rem;transition:color var(--t);display:inline-block}
+.fc a:hover{color:var(--white)}
+.fbot{padding-top:1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.fbot p{font-size:.74rem}
+.socs{display:flex;gap:.38rem}
+.soc{width:29px;height:29px;border:1px solid rgba(255,255,255,.12);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:rgba(255,255,255,.48);transition:all var(--t);display:inline-flex}
+.soc:hover{border-color:rgba(255,255,255,.3);color:var(--white)}
+
+/* mini footer */
+.mft{background:var(--ink);color:rgba(255,255,255,.48);padding:1.4rem 5.5%;text-align:center;font-size:.76rem;flex-shrink:0}
+.mft a{color:rgba(255,255,255,.6);transition:color var(--t)}
+.mft a:hover{color:var(--white)}
+
+/* ── PAGE HERO ───────────────────────────────── */
+.phero{background:var(--surf);border-bottom:1px solid var(--border);padding:48px 5.5% 36px}
+.phero .inner{max-width:1200px;margin:0 auto}
+
+/* ── SIDEBAR LAYOUT ──────────────────────────── */
+.sbl{display:grid;grid-template-columns:252px 1fr;gap:1.85rem;align-items:start}
+.sb{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.35rem;position:sticky;top:76px}
+.sb h4{font-size:.77rem;font-weight:700;color:var(--ink);margin-bottom:.8rem;padding-bottom:.48rem;border-bottom:1px solid var(--border)}
+.sbs{margin-bottom:1.15rem}
+.chk{display:flex;align-items:center;gap:.5rem;padding:.27rem 0;font-size:.8rem;color:var(--body);cursor:pointer}
+.chk input{accent-color:var(--blue);width:13px;height:13px}
+
+/* ── FORM ────────────────────────────────────── */
+.fg{margin-bottom:1.1rem}
+.fg label{display:block;font-size:.77rem;font-weight:600;color:var(--ink);margin-bottom:.35rem}
+.fg input,.fg select,.fg textarea{width:100%;padding:.65rem .95rem;border:1px solid var(--border);border-radius:var(--r);font-family:'Manrope',sans-serif;font-size:.87rem;color:var(--ink);background:var(--white);outline:none;transition:border-color var(--t)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue)}
+.fg textarea{resize:vertical;min-height:105px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* CSS radio filter */
+.frow2{display:flex;gap:.42rem;flex-wrap:wrap;margin-bottom:1.85rem}
+.frow2 input[type=radio]{display:none}
+.frow2 label{padding:.35rem .95rem;border:1px solid var(--border);border-radius:99px;background:var(--white);font-size:.76rem;font-weight:500;color:var(--body);cursor:pointer;transition:all var(--t);display:inline-block}
+.frow2 label:hover{background:var(--surf)}
+.frow2 input[type=radio]:checked+label{background:var(--ink);border-color:var(--ink);color:var(--white)}
+
+/* ── AUTH ────────────────────────────────────── */
+.awrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--surf)}
+.abox{background:var(--white);border:1px solid var(--border);border-radius:15px;padding:2.3rem;width:100%;max-width:425px;box-shadow:0 4px 28px rgba(0,0,0,.055)}
+.alogo{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;text-align:center;display:block;margin-bottom:1.75rem;color:var(--ink)}
+.alogo em{color:var(--blue);font-style:normal}
+.abox h2{text-align:center;margin-bottom:.32rem}
+.abox .sub{text-align:center;margin-bottom:1.5rem}
+.divtxt{text-align:center;font-size:.75rem;color:var(--muted);margin:1.15rem 0;position:relative}
+.divtxt::before,.divtxt::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:var(--border)}
+.divtxt::before{left:0}.divtxt::after{right:0}
+.sauth{display:flex;gap:.55rem}
+.sauth a{flex:1;padding:.55rem;border:1px solid var(--border);border-radius:var(--r);font-size:.79rem;font-weight:600;color:var(--body);text-align:center;transition:all var(--t);background:var(--white)}
+.sauth a:hover{background:var(--surf)}
+.asw{text-align:center;font-size:.79rem;color:var(--muted);margin-top:1.15rem}
+.asw a{color:var(--blue);font-weight:600}
+
+.asw p{font-size:.71rem;color:var(--muted);margin-top:.5rem}
+
+
+</style>
+</head>
+<body>
+
+<!-- ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  HOME  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+<div class="pg" id="pg-home">
+  <nav class="nav">
+    <a href="#pg-home" class="logo">
+      <img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px">
+    </a>
+    <ul class="navlinks">
+      <li><a href="#pg-jobs" class="on">Jobs</a></li>
+      <li><a href="#pg-companies">Companies</a></li>
+      <li><a href="#pg-how">How it Works</a></li>
+      <li><a href="#pg-stories">Stories</a></li>
+    </ul>
+    <div class="navr">
+      <a href="#pg-signin" class="btn ghost">Sign In</a>
+      
+    </div>
+  </nav>
+
+  <main style="flex:1">
+    <!-- HERO -->
+    <div style="max-width:1200px;margin:0 auto">
+      <div class="hero">
+        <div>
+          
+          <h1>Find work that<br>actually fits you.</h1>
+          <p class="hdsc">Find roles at companies that value craft, culture, and growth — not just headcount.</p>
+          <div class="sw">
+            <div class="sf">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input type="text" placeholder="Role, skill, or company…"/>
+            </div>
+            <div class="ssep"></div>
+            <div class="sf" style="flex:0">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
+              <select><option>Anywhere</option><option>Remote</option><option>New York</option><option>San Francisco</option><option>London</option><option>Singapore</option></select>
+            </div>
+            <a href="#pg-jobs" class="btn accent">Search</a>
+          </div>
+          <div class="pills">
+            <span>Popular:</span>
+            <a href="#pg-jobs" class="pill">AI Engineer</a>
+            <a href="#pg-jobs" class="pill">Product Design</a>
+            <a href="#pg-jobs" class="pill">Data Science</a>
+            <a href="#pg-jobs" class="pill">DevOps</a>
+            <a href="#pg-jobs" class="pill">Marketing</a>
+          </div>
+        </div>
+        <div class="hr">
+          <div class="srow">
+            <div class="sc"><div class="num">84k</div><div class="lbl">Open Roles</div></div>
+            <div class="sc"><div class="num">6.2k</div><div class="lbl">Companies</div></div>
+            <div class="sc"><div class="num">2.1M</div><div class="lbl">Candidates</div></div>
+          </div>
+          <div class="fcard">
+            <div class="flbl">Featured Opening</div>
+            <div class="fco"><div class="flo">🌿</div><div><div class="fn">Anthropic</div><div class="fls">London, UK · Full-time</div></div></div>
+            <div class="frl">Senior AI / ML Engineer</div>
+            <div class="fsa">£120k – £160k <strong>+ equity</strong></div>
+            <div class="fft"><span class="fbg">PyTorch · LLMs · RLHF</span><a href="#pg-apply" class="fap">Apply Now →</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="d" style="margin:0 5.5%">
+
+    <!-- CATEGORIES -->
+    <div class="wrap"><div class="sec">
+      <div class="sh"><div><h2>Explore every field</h2></div><a href="#pg-jobs" class="btn ghost">All Categories →</a></div>
+      <div class="g4">
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im1.png" alt="" style="width:250px;height:120px;"></div><div class="catnm">Software Engineering</div><div class="catct">14,320 open roles</div></a>
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im2.png" alt="" style="width: 250px; height:120px;"></div><div class="catnm">Design & Creative</div><div class="catct">5,840 open roles</div></a>
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im3.png" alt="" style="width: 250px; height:120px;"></div><div class="catnm">Data & Analytics</div><div class="catct">8,110 open roles</div></a>
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im4.png" alt="" style="width: 250px; height:120px;"></div><div class="catnm">Product Management</div><div class="catct">3,670 open roles</div></a>
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im5.png" alt="" style="width: 250px; height:120px;"></div><div class="catnm">Marketing & Growth</div><div class="catct">6,490 open roles</div></a>
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im6.png" alt="" style="width: 250px; height:120px;"></div><div class="catnm">DevOps & Cloud</div><div class="catct">4,220 open roles</div></a>
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im7.png" alt="" style="width: 250px; height:120px;"></div><div class="catnm">Cybersecurity</div><div class="catct">2,980 open roles</div></a>
+        <a href="#pg-jobs" class="catc"><div class="catic"><img src="/im8.png" alt="" style="width: 250px; height:120px;"></div><div class="catnm">Sales & Biz Dev</div><div class="catct">7,760 open roles</div></a>
+      </div>
+    </div></div>
+
+    <hr class="d" style="margin:0 5.5%">
+
+    <!-- FEATURED JOBS -->
+    <div class="wrap"><div class="sec">
+      <div class="sh"><div><h2>Hand-picked for you</h2><p class="sub">Curated from companies actively hiring right now.</p></div><a href="#pg-jobs" class="btn ghost">All Jobs →</a></div>
+      <div class="jg">
+        <!-- card 1 -->
+        <div class="jcard"><div class="jct"><div class="clo"><img src="/im1.png" alt="" style="width:40px;height:40px;"></div><span class="bdg br">Remote</span></div><div><div class="jtt">Senior Product Designer</div><div class="jco">Stripe · San Francisco, CA</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Remote / US</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 days ago</span></div><div class="jts"><span class="jtg">Figma</span><span class="jtg">Design Systems</span><span class="jtg">User Research</span></div><div class="jbot"><div class="jsal">$140k – $180k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="b1"><label for="b1" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+        <!-- card 2 -->
+        <div class="jcard"><div class="jct"><div class="clo"><img src="/im2.png" alt="" style="width:40px;height:40px;"></div><span class="bdg bf">Full-time</span></div><div><div class="jtt">AI / ML Engineer</div><div class="jco">Anthropic · London, UK</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>London, UK</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 day ago</span></div><div class="jts"><span class="jtg">Python</span><span class="jtg">PyTorch</span><span class="jtg">LLMs</span><span class="jtg">RLHF</span></div><div class="jbot"><div class="jsal">£120k – £160k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="b2"><label for="b2" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+        <!-- card 3 -->
+        <div class="jcard"><div class="jct"><div class="clo"><img src="/im3.png" alt="" style="width:40px;height:40px;"></div><span class="bdg bf">Full-time</span></div><div><div class="jtt">Head of Growth Marketing</div><div class="jco">Shopify · Toronto, Canada</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Toronto, CA</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>3 days ago</span></div><div class="jts"><span class="jtg">SEO</span><span class="jtg">Paid Ads</span><span class="jtg">Analytics</span></div><div class="jbot"><div class="jsal">$110k – $145k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="b3"><label for="b3" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+        <!-- card 4 -->
+        <div class="jcard"><div class="jct"><div class="clo"><img src="/im4.png" alt="" style="width:40px;height:40px;"></div><span class="bdg bp">Part-time</span></div><div><div class="jtt">Frontend Developer (React)</div><div class="jco">Linear · Worldwide Remote</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Worldwide</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5 hrs ago</span></div><div class="jts"><span class="jtg">React</span><span class="jtg">TypeScript</span><span class="jtg">CSS</span></div><div class="jbot"><div class="jsal">$80–$120 <small>/ hr</small></div><div class="jacts"><input type="checkbox" class="bki" id="b4"><label for="b4" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+        <!-- card 5 -->
+        <div class="jcard"><div class="jct"><div class="clo"><img src="/im5.png" alt="" style="width:40px;height:40px;"></div><span class="bdg bi">Internship</span></div><div><div class="jtt">Data Science Intern</div><div class="jco">Notion · New York, NY</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>New York, NY</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 day ago</span></div><div class="jts"><span class="jtg">Python</span><span class="jtg">SQL</span><span class="jtg">Tableau</span></div><div class="jbot"><div class="jsal">$35–$50 <small>/ hr</small></div><div class="jacts"><input type="checkbox" class="bki" id="b5"><label for="b5" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+        <!-- card 6 -->
+        <div class="jcard"><div class="jct"><div class="clo"><img src="/im6.png" alt="" style="width:40px;height:40px;"></div><span class="bdg br">Remote</span></div><div><div class="jtt">DevOps & Platform Engineer</div><div class="jco">Vercel · Remote — US / EU</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Remote</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>4 days ago</span></div><div class="jts"><span class="jtg">Kubernetes</span><span class="jtg">AWS</span><span class="jtg">Terraform</span></div><div class="jbot"><div class="jsal">$130k–$170k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="b6"><label for="b6" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+      </div>
+    </div></div>
+
+    <!-- COMPANIES strip -->
+    <div class="bg-s" style="padding:68px 5.5%"><div style="max-width:1200px;margin:0 auto">
+      <div class="sh"><div><h2>Great companies hiring now</h2></div><a href="#pg-companies" class="btn ghost">All Companies →</a></div>
+      <div class="cog">
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/apply.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Apple</div><div class="ccin">Consumer Electronics · Cupertino, CA</div><div class="ccbar"><span>Open positions</span><strong>248 jobs</strong></div></a>
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/figma.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Figma</div><div class="ccin">Design Software · San Francisco, CA</div><div class="ccbar"><span>Open positions</span><strong>67 jobs</strong></div></a>
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/1.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">OpenAI</div><div class="ccin">Artificial Intelligence · SF, CA</div><div class="ccbar"><span>Open positions</span><strong>134 jobs</strong></div></a>
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/2.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Spotify</div><div class="ccin">Music Streaming · Stockholm</div><div class="ccbar"><span>Open positions</span><strong>89 jobs</strong></div></a>
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/3.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Revolut</div><div class="ccin">Fintech · London, UK</div><div class="ccbar"><span>Open positions</span><strong>312 jobs</strong></div></a>
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/4.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Tesla</div><div class="ccin">Electric Vehicles · Austin, TX</div><div class="ccbar"><span>Open positions</span><strong>521 jobs</strong></div></a>
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/5.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Cloudflare</div><div class="ccin">Internet Infrastructure · Global</div><div class="ccbar"><span>Open positions</span><strong>156 jobs</strong></div></a>
+        <a href="#pg-companies" class="cocard"><div class="cclo"><img src="/apply.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Notion</div><div class="ccin">Productivity · NY / Remote</div><div class="ccbar"><span>Open positions</span><strong>44 jobs</strong></div></a>
+      </div>
+    </div></div>
+
+    <!-- HOW IT WORKS -->
+    <div class="wrap"><div class="sec" style="text-align:center">
+      <div class="sec-tag c">The Process</div>
+      <h2>Get hired in 4 steps</h2>
+      <p class="sub" style="margin:.45rem auto 2.75rem;max-width:350px">Clear path from profile to paycheck — no fluff.</p>
+      <div class="hgrid">
+        <div class="step"><div class="stnum">1</div><div class="stt">Create Profile</div><div class="std">Tell us your skills and what you're looking for. Under 5 minutes.</div></div>
+        <div class="step"><div class="stnum">2</div><div class="stt">Explore Matches</div><div class="std">Browse curated roles or let our AI surface the best fits.</div></div>
+        <div class="step"><div class="stnum">3</div><div class="stt">One-click Apply</div><div class="std">Your profile is your resume. Apply to multiple roles instantly.</div></div>
+        <div class="step"><div class="stnum">4</div><div class="stt">Get Hired</div><div class="std">Interview, negotiate, and start your next chapter.</div></div>
+      </div>
+    </div></div>
+
+
+    <!-- TESTIMONIALS -->
+    <div class="bg-s" style="padding:68px 5.5%"><div style="max-width:1200px;margin:0 auto">
+      <div class="sh"><div><div class="sec-tag">Success Stories</div><h2>Real people, real outcomes</h2></div><a href="#pg-stories" class="btn ghost">All Stories →</a></div>
+      <div class="g3">
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"Within three weeks I had three offers and landed a role paying 40% more. NexWork changed my approach entirely."</p><div class="tau"><div class="av"><img src="/apply.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Sarah Kim</div><div class="ar">Senior Engineer @ Vercel</div></div></div></div>
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"Every role felt genuinely relevant. I found my dream job in 12 days without wading through irrelevant noise."</p><div class="tau"><div class="av"><img src="/1.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Marcus Tan</div><div class="ar">Lead Designer @ Figma</div></div></div></div>
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"We hired our founding engineering team in under a month. The candidate quality is unreal — only platform we use."</p><div class="tau"><div class="av"><img src="/2.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Priya Mehta</div><div class="ar">CTO @ Fintric</div></div></div></div>
+      </div>
+    </div></div>
+
+    <!-- NEWSLETTER -->
+    <div class="wrap"><div class="sec" style="text-align:center;max-width:460px;margin:0 auto">
+      
+      <h2>Never miss the right role</h2>
+      <p class="sub" style="margin:.45rem 0 1.4rem">Weekly alerts tailored to your skills, straight to your inbox.</p>
+      <div style="display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap">
+        <input type="email" placeholder="your@email.com" style="padding:.65rem 1rem;border:1px solid var(--border);border-radius:var(--r);font-family:'Manrope',sans-serif;font-size:.87rem;outline:none;min-width:220px"/>
+        <button type="button" class="btn solid lg">Get Alerts</button>
+      </div>
+    </div></div>
+  </main>
+
+  <footer>
+    <div class="fgrid">
+      <div>
+        <a href="#pg-home" class="flogo">Job<em>Seeking</em></a>
+        <p class="ftag">Connecting exceptional talent with companies that care about craft, culture, and growth.</p>
+      </div>
+      <div class="fc">
+        <h4>Job Seekers</h4>
+        <ul>
+          <li><a href="#pg-jobs">Browse Jobs</a></li>
+          <li><a href="#pg-jobs">Remote Jobs</a></li>
+          <li><a href="#pg-salary">Salary Explorer</a></li>
+          <li><a href="#pg-resume">Resume Builder</a></li>
+          <li><a href="#pg-blog">Career Resources</a></li>
+        </ul>
+      </div>
+      <div class="fc">
+        <h4>Employers</h4>
+        <ul>
+         
+          <li><a href="#pg-companies">Talent Search</a></li>
+          <li><a href="#pg-pricing">Pricing</a></li>
+          <li><a href="#pg-contact">ATS Integration</a></li>
+          <li><a href="#pg-contact">Employer Branding</a></li>
+        </ul>
+      </div>
+      <div class="fc">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#pg-about">About</a></li>
+          <li><a href="#pg-blog">Blog</a></li>
+          <li><a href="#pg-jobs">Careers</a></li>
+          <li><a href="#pg-about">Press</a></li>
+          <li><a href="#pg-contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <p>© 2026 NexWork Inc. All rights reserved.</p>
+      <div class="socs">
+        <a href="#pg-home" class="soc">𝕏</a>
+        <a href="#pg-home" class="soc">in</a>
+        <a href="#pg-home" class="soc">gh</a>
+      </div>
+    </div>
+  </footer>
+</div><!-- /home -->
+
+
+<!-- ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  JOBS  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+<div class="pg" id="pg-jobs">
+  <nav class="nav">
+    <a href="#pg-home" class="logo"><img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px"></a>
+    <ul class="navlinks">
+      <li><a href="#pg-jobs" class="on">Jobs</a></li>
+      <li><a href="#pg-companies">Companies</a></li>
+      <li><a href="#pg-how">How it Works</a></li>
+      <li><a href="#pg-stories">Stories</a></li>
+    </ul>
+    <div class="navr"><a href="#pg-signin" class="btn ghost">Sign In</a>
+  </nav>
+  <div class="phero"><div class="inner"><div class="sec-tag">Browse Opportunities</div><h1>Find Your Next Role</h1><p class="sub">84,000+ open positions at companies you'll love</p></div></div>
+  <div class="wrap" style="flex:1"><div class="sec">
+    <div class="sbl">
+      <div class="sb">
+        <div class="sbs"><h4>Job Type</h4><label class="chk"><input type="checkbox" checked> Full-time</label><label class="chk"><input type="checkbox" checked> Part-time</label><label class="chk"><input type="checkbox"> Remote only</label><label class="chk"><input type="checkbox"> Internship</label><label class="chk"><input type="checkbox"> Contract</label></div>
+        <div class="sbs"><h4>Experience</h4><label class="chk"><input type="checkbox"> Entry Level</label><label class="chk"><input type="checkbox" checked> Mid Level</label><label class="chk"><input type="checkbox" checked> Senior</label><label class="chk"><input type="checkbox"> Director+</label></div>
+        <div class="sbs"><h4>Salary Range</h4><input type="range" min="30" max="300" value="80" style="width:100%;accent-color:var(--blue);margin-top:.4rem"/><p style="font-size:.72rem;color:var(--muted);margin-top:.28rem">Min: $80k / year</p></div>
+        <div class="sbs"><h4>Category</h4><label class="chk"><input type="checkbox" checked> Engineering</label><label class="chk"><input type="checkbox"> Design</label><label class="chk"><input type="checkbox"> Marketing</label><label class="chk"><input type="checkbox"> Product</label><label class="chk"><input type="checkbox"> Data & AI</label></div>
+        <button type="button" class="btn accent" style="width:100%;margin-top:.4rem">Apply Filters</button>
+      </div>
+      <div>
+        <div style="display:flex;gap:.55rem;margin-bottom:1.4rem;flex-wrap:wrap">
+          <div style="flex:1;min-width:150px;display:flex;align-items:center;gap:.55rem;background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:.58rem .95rem">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search jobs…" style="border:none;outline:none;background:transparent;font-family:'Manrope',sans-serif;font-size:.86rem;width:100%"/>
+          </div>
+          <select style="padding:.58rem .95rem;border:1px solid var(--border);border-radius:var(--r);font-family:'Manrope',sans-serif;font-size:.8rem;background:var(--white);color:var(--body);outline:none"><option>Most Recent</option><option>Most Relevant</option><option>Salary: High to Low</option></select>
+        </div>
+        <div class="frow2">
+          <input type="radio" name="jf" id="jf0" checked><label for="jf0">All</label>
+          <input type="radio" name="jf" id="jf1"><label for="jf1">Full-time</label>
+          <input type="radio" name="jf" id="jf2"><label for="jf2">Remote</label>
+          <input type="radio" name="jf" id="jf3"><label for="jf3">Part-time</label>
+          <input type="radio" name="jf" id="jf4"><label for="jf4">Internship</label>
+          <input type="radio" name="jf" id="jf5"><label for="jf5">Contract</label>
+        </div>
+        <div class="jg">
+          <div class="jcard"><div class="jct"><div class="clo"><img src="/apply.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><span class="bdg br">Remote</span></div><div><div class="jtt">Senior Product Designer</div><div class="jco">Stripe · San Francisco, CA</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Remote / US</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 days ago</span></div><div class="jts"><span class="jtg">Figma</span><span class="jtg">Design Systems</span><span class="jtg">User Research</span></div><div class="jbot"><div class="jsal">$140k–$180k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="bj1"><label for="bj1" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+          <div class="jcard"><div class="jct"><div class="clo"><img src="/figma.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><span class="bdg bf">Full-time</span></div><div><div class="jtt">AI / ML Engineer</div><div class="jco">Anthropic · London, UK</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>London, UK</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 day ago</span></div><div class="jts"><span class="jtg">Python</span><span class="jtg">PyTorch</span><span class="jtg">LLMs</span></div><div class="jbot"><div class="jsal">£120k–£160k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="bj2"><label for="bj2" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+          <div class="jcard"><div class="jct"><div class="clo"><img src="/1.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><span class="bdg bf">Full-time</span></div><div><div class="jtt">Head of Growth Marketing</div><div class="jco">Shopify · Toronto, Canada</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Toronto</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>3 days ago</span></div><div class="jts"><span class="jtg">SEO</span><span class="jtg">Paid Ads</span><span class="jtg">Analytics</span></div><div class="jbot"><div class="jsal">$110k–$145k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="bj3"><label for="bj3" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+          <div class="jcard"><div class="jct"><div class="clo"><img src="/2.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><span class="bdg bp">Part-time</span></div><div><div class="jtt">Frontend Developer (React)</div><div class="jco">Linear · Worldwide Remote</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Worldwide</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5 hrs ago</span></div><div class="jts"><span class="jtg">React</span><span class="jtg">TypeScript</span><span class="jtg">CSS</span></div><div class="jbot"><div class="jsal">$80–$120 <small>/ hr</small></div><div class="jacts"><input type="checkbox" class="bki" id="bj4"><label for="bj4" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+          <div class="jcard"><div class="jct"><div class="clo"><img src="/3.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><span class="bdg bi">Internship</span></div><div><div class="jtt">Data Science Intern</div><div class="jco">Notion · New York, NY</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>New York</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 day ago</span></div><div class="jts"><span class="jtg">Python</span><span class="jtg">SQL</span><span class="jtg">Tableau</span></div><div class="jbot"><div class="jsal">$35–$50 <small>/ hr</small></div><div class="jacts"><input type="checkbox" class="bki" id="bj5"><label for="bj5" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+          <div class="jcard"><div class="jct"><div class="clo"><img src="/4.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><span class="bdg br">Remote</span></div><div><div class="jtt">DevOps & Platform Engineer</div><div class="jco">Vercel · Remote — US / EU</div></div><div class="jm"><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>Remote</span><span class="mt"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>4 days ago</span></div><div class="jts"><span class="jtg">Kubernetes</span><span class="jtg">AWS</span><span class="jtg">Terraform</span></div><div class="jbot"><div class="jsal">$130k–$170k <small>/ yr</small></div><div class="jacts"><input type="checkbox" class="bki" id="bj6"><label for="bj6" class="bkl">♡</label><a href="#pg-apply" class="abtn">Apply</a></div></div></div>
+        </div>
+        <div style="text-align:center;margin-top:2rem"><a href="#pg-jobs" class="btn ghost lg">Load More Jobs</a></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="mft">© 2026 JobSeeking · <a href="#pg-home">Home</a> · <a href="#pg-about">About</a> · <a href="#pg-pricing">Pricing</a> · <a href="#pg-contact">Contact</a></div>
+</div>
+
+
+<!-- ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  COMPANIES  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+<div class="pg" id="pg-companies">
+  <nav class="nav">
+    <a href="#pg-home" class="logo"><img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px"></a>
+    <ul class="navlinks">
+      <li><a href="#pg-jobs">Jobs</a></li>
+      <li><a href="#pg-companies" class="on">Companies</a></li>
+      <li><a href="#pg-how">How it Works</a></li>
+      <li><a href="#pg-stories">Stories</a></li>
+    </ul>
+    <div class="navr"><a href="#pg-signin" class="btn ghost">Sign In</a></div>
+  </nav>
+  <div class="phero"><div class="inner"><div class="sec-tag">Top Employers</div><h1>Browse Companies</h1><p class="sub">6,200+ companies across every industry and region</p></div></div>
+  <div class="wrap" style="flex:1"><div class="sec">
+    <div style="display:flex;gap:.55rem;margin-bottom:1.85rem;flex-wrap:wrap">
+      <div style="flex:1;min-width:170px;display:flex;align-items:center;gap:.55rem;background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:.58rem .95rem"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="Search companies…" style="border:none;outline:none;background:transparent;font-family:'Manrope',sans-serif;font-size:.86rem;width:100%"/></div>
+      <select style="padding:.58rem .95rem;border:1px solid var(--border);border-radius:var(--r);font-family:'Manrope',sans-serif;font-size:.8rem;background:var(--white);outline:none"><option>All Industries</option><option>Technology</option><option>Finance</option><option>Healthcare</option><option>Design</option></select>
+      <select style="padding:.58rem .95rem;border:1px solid var(--border);border-radius:var(--r);font-family:'Manrope',sans-serif;font-size:.8rem;background:var(--white);outline:none"><option>All Sizes</option><option>Startup (1–50)</option><option>Mid (51–500)</option><option>Enterprise (500+)</option></select>
+    </div>
+    <div class="cog">
+      <div class="cocard"><div class="cclo"><img src="/apply.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Apple</div><div class="ccin">Consumer Electronics · Cupertino, CA</div><div class="ccbar"><span>Open positions</span><strong>248 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/figma.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Figma</div><div class="ccin">Design Software · San Francisco, CA</div><div class="ccbar"><span>Open positions</span><strong>67 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/1.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">OpenAI</div><div class="ccin">Artificial Intelligence · SF, CA</div><div class="ccbar"><span>Open positions</span><strong>134 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/2.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Spotify</div><div class="ccin">Music Streaming · Stockholm / NY</div><div class="ccbar"><span>Open positions</span><strong>89 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/3.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Revolut</div><div class="ccin">Fintech · London, UK</div><div class="ccbar"><span>Open positions</span><strong>312 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/4.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Tesla</div><div class="ccin">Electric Vehicles · Austin, TX</div><div class="ccbar"><span>Open positions</span><strong>521 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/5.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Cloudflare</div><div class="ccin">Internet Infrastructure · Global</div><div class="ccbar"><span>Open positions</span><strong>156 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/im6.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Notion</div><div class="ccin">Productivity · NY / Remote</div><div class="ccbar"><span>Open positions</span><strong>44 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/im7.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Stripe</div><div class="ccin">Fintech · San Francisco, CA</div><div class="ccbar"><span>Open positions</span><strong>198 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/im8.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Airbnb</div><div class="ccin">Travel & Hospitality · SF, CA</div><div class="ccbar"><span>Open positions</span><strong>76 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/apply.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Netflix</div><div class="ccin">Entertainment · Los Gatos, CA</div><div class="ccbar"><span>Open positions</span><strong>112 jobs</strong></div></div>
+      <div class="cocard"><div class="cclo"><img src="/4.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div class="ccnm">Robinhood</div><div class="ccin">Fintech · Menlo Park, CA</div><div class="ccbar"><span>Open positions</span><strong>53 jobs</strong></div></div>
+    </div>
+    <div style="text-align:center;margin-top:2rem"><a href="#pg-companies" class="btn ghost lg">Load More</a></div>
+  </div></div>
+  <div class="mft">© 2026 JobSeeking · <a href="#pg-home">Home</a> · <a href="#pg-jobs">Jobs</a>  · <a href="#pg-contact">Contact</a></div>
+</div>
+
+
+<!-- ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  HOW IT WORKS  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+<div class="pg" id="pg-how">
+  <nav class="nav">
+    <a href="#pg-home" class="logo"><img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px"></a>
+    <ul class="navlinks">
+      <li><a href="#pg-jobs">Jobs</a></li>
+      <li><a href="#pg-companies">Companies</a></li>
+      <li><a href="#pg-how" class="on">How it Works</a></li>
+      <li><a href="#pg-stories">Stories</a></li>
+    </ul>
+    <div class="navr"><a href="#pg-signin" class="btn ghost">Sign In</a></div>
+  </nav>
+  <div style="flex:1">
+    <div class="phero" style="text-align:center"><div class="inner"><div class="sec-tag c">The Process</div><h1>Simple. Fast. Effective.</h1><p class="sub" style="margin:.45rem auto 0;max-width:420px">From signup to your first interview in days, not months.</p></div></div>
+    <div class="wrap"><div class="sec">
+      <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:1.85rem">
+        <div style="display:flex;gap:1.65rem;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:13px;padding:1.75rem">
+          <div style="width:50px;height:50px;border-radius:50%;background:var(--blue-lt);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--blue);flex-shrink:0">1</div>
+          <div><h3>Create Your Profile</h3><p style="margin-top:.42rem;color:var(--muted);font-size:.85rem">Sign up in under 5 minutes. Add skills, experience, and preferences. Upload your resume or sync from LinkedIn.</p><div style="display:flex;gap:.38rem;margin-top:.85rem;flex-wrap:wrap"><span class="jtg">Skills Assessment</span><span class="jtg">Resume Import</span><span class="jtg">LinkedIn Sync</span></div></div>
+        </div>
+        <div style="display:flex;gap:1.65rem;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:13px;padding:1.75rem">
+          <div style="width:50px;height:50px;border-radius:50%;background:var(--green-lt);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--green);flex-shrink:0">2</div>
+          <div><h3>Get Matched Instantly</h3><p style="margin-top:.42rem;color:var(--muted);font-size:.85rem">Our algorithm surfaces roles most aligned to your profile. Set preferences once and receive personalised weekly digests.</p><div style="display:flex;gap:.38rem;margin-top:.85rem;flex-wrap:wrap"><span class="jtg">AI Matching</span><span class="jtg">Weekly Digest</span><span class="jtg">Smart Alerts</span></div></div>
+        </div>
+        <div style="display:flex;gap:1.65rem;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:13px;padding:1.75rem">
+          <div style="width:50px;height:50px;border-radius:50%;background:var(--amber-lt);border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--amber);flex-shrink:0">3</div>
+          <div><h3>Apply in One Click</h3><p style="margin-top:.42rem;color:var(--muted);font-size:.85rem">Your NexWork profile IS your application. No copy-pasting. Apply to multiple roles simultaneously with a single click.</p><div style="display:flex;gap:.38rem;margin-top:.85rem;flex-wrap:wrap"><span class="jtg">One-click Apply</span><span class="jtg">Track Applications</span><span class="jtg">Status Updates</span></div></div>
+        </div>
+        <div style="display:flex;gap:1.65rem;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:13px;padding:1.75rem">
+          <div style="width:50px;height:50px;border-radius:50%;background:var(--purple-lt);border:2px solid var(--purple);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--purple);flex-shrink:0">4</div>
+          <div><h3>Get Hired &amp; Thrive</h3><p style="margin-top:.42rem;color:var(--muted);font-size:.85rem">Interview, negotiate with our salary benchmarks, and start your next chapter. Career advisors available at every step.</p><div style="display:flex;gap:.38rem;margin-top:.85rem;flex-wrap:wrap"><span class="jtg">Interview Prep</span><span class="jtg">Salary Benchmarks</span><span class="jtg">Career Coaching</span></div></div>
+        </div>
+        <div style="text-align:center;padding-top:.5rem">
+          <a href="#pg-register" class="btn accent lg">Get Started Free →</a>
+          <p style="font-size:.74rem;color:var(--muted);margin-top:.6rem">No credit card required</p>
+        </div>
+      </div>
+    </div></div>
+  </div>
+  <div class="mft">© 2026 JobSeeking · <a href="#pg-home">Home</a> · <a href="#pg-jobs">Browse Jobs</a> · <a href="#pg-register">Sign Up</a></div>
+</div>
+
+
+<!-- ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  STORIES  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+<div class="pg" id="pg-stories">
+  <nav class="nav">
+    <a href="#pg-home" class="logo"><img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px"></a>
+    <ul class="navlinks">
+      <li><a href="#pg-jobs">Jobs</a></li>
+      <li><a href="#pg-companies">Companies</a></li>
+      <li><a href="#pg-how">How it Works</a></li>
+      <li><a href="#pg-stories" class="on">Stories</a></li>
+    </ul>
+    <div class="navr"><a href="#pg-signin" class="btn ghost">Sign In</a></div>
+  </nav>
+  <div style="flex:1">
+    <div class="phero" style="text-align:center"><div class="inner"><div class="sec-tag c">Success Stories</div><h1>Real people, real outcomes</h1><p class="sub" style="margin:.45rem auto 0;max-width:440px">Over 200,000 professionals found their next role through NexWork.</p></div></div>
+    
+    <div class="wrap"><div class="sec">
+      <div class="g3">
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"Within three weeks I had three offers and landed a role paying 40% more. NexWork changed my approach entirely."</p><div class="tau"><div class="av"><img src="/apply.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Sarah Kim</div><div class="ar">Senior Engineer @ Vercel</div></div></div></div>
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"Every role felt genuinely relevant. I found my dream job in 12 days without wading through noise."</p><div class="tau"><div class="av"><img src="/figma.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Marcus Tan</div><div class="ar">Lead Designer @ Figma</div></div></div></div>
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"We hired our founding engineering team in under a month. The candidate quality is unreal."</p><div class="tau"><div class="av"><img src="/1.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Priya Mehta</div><div class="ar">CTO @ Fintric</div></div></div></div>
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"As a career changer I was nervous. NexWork's matching helped me pivot into product management seamlessly."</p><div class="tau"><div class="av"><img src="/2.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">James Okafor</div><div class="ar">PM @ Notion</div></div></div></div>
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"The salary explorer alone is worth signing up. I negotiated $22k more using their data — incredible resource."</p><div class="tau"><div class="av"><img src="/3.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Hana Yoshida</div><div class="ar">Data Scientist @ Spotify</div></div></div></div>
+        <div class="tcard"><div class="tst">★★★★★</div><p class="ttxt">"Remote job hunting used to feel impossible. NexWork filtered exactly the roles I needed in 30 seconds."</p><div class="tau"><div class="av"><img src="/4.png" alt="" style="width:40px;height:40px;border-radius:30%;"></div><div><div class="an">Diego Reyes</div><div class="ar">Frontend Dev @ Linear</div></div></div></div>
+      </div>
+      
+      <div style="text-align:center;margin-top:2.75rem"><a href="#pg-register" class="btn accent lg">Join 200k+ Professionals</a></div>
+    </div></div>
+  </div>
+  
+  <div class="mft">© 2026 NexWork · <a href="#pg-home">Home</a> · <a href="#pg-about">About</a> · <a href="#pg-register">Sign Up</a></div>
+</div>
+
+
+<!-- ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  SIGN IN  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+<div class="pg" id="pg-signin">
+  <nav class="nav" style="position:relative">
+    <a href="#pg-home" class="logo"><img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px"></a>
+    <ul class="navlinks"></ul>
+    <div class="navr"><a href="#pg-home" class="btn ghost">← Back to Home</a></div>
+  </nav>
+  <div class="awrap">
+    <div class="abox">
+      <a href="#pg-home" class="alogo"><img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px"></a>
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to your account</p>
+      <div class="fg"><label>Email Address</label><input type="email" placeholder="you@example.com"/></div>
+      <div class="fg"><label>Password</label><input type="password" placeholder="••••••••"/></div>
+      <div style="display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:1.15rem">
+        <label style="display:flex;align-items:center;gap:.38rem;cursor:pointer"><input type="checkbox" style="accent-color:var(--blue)"> Remember me</label>
+        <a href="#pg-signin" style="color:var(--blue)">Forgot password?</a>
+      </div>
+      <a href="#pg-resume" class="btn solid" style="width:100%;padding:.7rem;font-size:.9rem">Sign In</a>
+      <div class="divtxt">or continue with</div>
+      <div class="sauth">
+        <a href="#pg-signin"> Google</a>
+        <a href="#pg-signin"> GitHub</a>
+        <a href="#pg-signin"> LinkedIn</a>
+      </div>
+      <p class="asw">Don't have an account? <a href="#pg-register">Create one free</a></p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  REGISTER  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+<div class="pg" id="pg-register">
+  <nav class="nav" style="position:relative">
+    <a href="#pg-home" class="logo"><img src="/Untitled design.png" alt="NexWork" style="width:60px;height:60px;margin-right:.42rem;margin-top:10px"></a>
+    <ul class="navlinks"></ul>
+    <div class="navr"><a href="#pg-home" class="btn ghost">← Back to Home</a></div>
+  </nav>
+  <div class="awrap">
+    <div class="abox" style="max-width:480px">
+      <a href="#pg-home" class="alogo">Job<em>Seeking</em></a>
+      <h2>Create your account</h2>
+      <p class="sub">Free forever for job seekers</p>
+      <div class="frow"><div class="fg"><label>First Name</label><input type="text" placeholder="Jane"/></div><div class="fg"><label>Last Name</label><input type="text" placeholder="Doe"/></div></div>
+      <div class="fg"><label>Email Address</label><input type="email" placeholder="you@example.com"/></div>
+      <div class="fg"><label>Password</label><input type="password" placeholder="Min. 8 characters"/></div>
+      <div class="fg"><label>I am a…</label><select><option>Job Seeker</option><option>Employer / Recruiter</option><option>Both</option></select></div>
+      <a href="#pg-resume" class="btn accent" style="width:100%;padding:.7rem;font-size:.9rem">Create Free Account</a>
+      <div class="divtxt">or sign up with</div>
+      <div class="sauth"><a href="#pg-register"> Google</a><a href="#pg-register"> LinkedIn</a></div>
+      <p class="asw">Already have an account? <a href="#pg-signin">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
